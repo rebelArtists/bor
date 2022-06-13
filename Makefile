@@ -17,6 +17,12 @@ bor:
 	mkdir -p $(GOPATH)/bin/
 	go build -o $(GOBIN)/bor ./cmd/cli/main.go
 
+bor-all:
+	$(GORUN) build/ci.go install
+	mkdir -p $(GOPATH)/bin/
+	cp $(GOBIN)/geth $(GOBIN)/bor
+	cp $(GOBIN)/* $(GOPATH)/bin/
+
 protoc:
 	protoc --go_out=. --go-grpc_out=. ./internal/cli/server/proto/*.proto
 
