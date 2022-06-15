@@ -13,11 +13,17 @@ jobs:
       #   run: make all
       # - name: "Run tests"
       #   run: make test
-      - uses: webfactory/ssh-agent@v0.5.2
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - uses: actions/checkout@v1
-      - uses: ./.github/actions/ansible
-        with:
-          playbook: playbook.yml
-          inventory: ec2-3-144-232-188.us-east-2.compute.amazonaws.com
+
+      uses: dawidd6/action-ansible-playbook@v2
+      with:
+        # Required, playbook filepath
+        playbook: playbook.yml
+        # Optional, directory where playbooks live
+        directory: ../actions/ansible
+        # Optional, SSH private key
+        key: ${{secrets.SSH_PRIVATE_KEY}}
+        # Optional, literal inventory file contents
+        inventory: |
+          all:
+            hosts:
+              ec2-3-144-232-188.us-east-2.compute.amazonaws.com:
