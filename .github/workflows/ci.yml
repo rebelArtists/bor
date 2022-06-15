@@ -20,4 +20,4 @@ jobs:
       - uses: ./.github/actions/ansible
         with:
           playbook: playbook.yml
-          inventory: inventory.yml
+          inventory: ec2-3-144-232-188.us-east-2.compute.amazonaws.com
