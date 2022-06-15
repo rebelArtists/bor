@@ -12,7 +12,7 @@ jobs:
       # - name: "Build binaries"
       #   run: make all
       # - name: "Run tests"
-      #   run: make test
+      ##   run: make test
 
       - uses: dawidd6/action-ansible-playbook@v2
         with:
