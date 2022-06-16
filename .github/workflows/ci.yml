@@ -70,7 +70,7 @@ jobs:
           directory: .github/actions/ansible
           # Optional, SSH private key
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          # Optional, literal inventory file contents
+          # Optional, todo make dynamic
           inventory: |
             all:
               hosts:
