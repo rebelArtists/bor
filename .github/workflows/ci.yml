@@ -57,7 +57,7 @@ jobs:
         continue-on-error: false
       - uses: dawidd6/action-ansible-playbook@v2
         env:
-          ECR_IMAGE: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          ECR_IMAGE: ${{ steps.login-ecr.outputs.registry }}/bor_images:${{ steps.vars.outputs.sha_short }}
         with:
           # Required, playbook filepath
           playbook: playbook.yml
