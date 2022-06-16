@@ -55,6 +55,9 @@ jobs:
         if: github.event_name == 'push'
         run: terraform plan -no-color -input=false
         continue-on-error: false
+      # todo add terraform apply to CI (standup temp network cluster for testing)
+      # ensure using correct env for standing up arch, correct key in TF cloud
+      # configure ansible dynamic inventory
       - name: Checkout
         uses: actions/checkout@v1
       - uses: dawidd6/action-ansible-playbook@v2
@@ -75,3 +78,4 @@ jobs:
             all:
               hosts:
                 ec2-3-145-201-148.us-east-2.compute.amazonaws.com:
+      # todo: terraform destroy all resources
