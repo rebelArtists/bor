@@ -4,7 +4,7 @@
   vars:
     create_containers: 1
     default_container_name: bor
-    default_container_image: {{ ecr_image }}
+    default_container_image: "{{ lookup('env','ECR_IMAGE') }}"
   tasks:
     - name: Install Docker Module for Python
       pip:
