@@ -35,22 +35,22 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        # terraform_version: 0.13.0
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-    - name: 'Terraform Init'
-      id: init
-      working-directory: .github/actions/ci_deployment_cluster
-      run: terraform init
-      env:
-        GIT_SSH_COMMAND: "echo '${{ secrets.GH_SSH_KEY }}' > id_rsa
-          && ssh-keyscan github.com > known_hosts
-          && chmod 600 id_rsa known_hosts
-          && ssh -i ./id_rsa -o UserKnownHostsFile=./known_hosts"
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          # terraform_version: 0.13.0
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: 'Terraform Init'
+        id: init
+        working-directory: .github/actions/ci_deployment_cluster
+        run: terraform init
+        env:
+          GIT_SSH_COMMAND: "echo '${{ secrets.GH_SSH_KEY }}' > id_rsa
+            && ssh-keyscan github.com > known_hosts
+            && chmod 600 id_rsa known_hosts
+            && ssh -i ./id_rsa -o UserKnownHostsFile=./known_hosts"
 
       - uses: dawidd6/action-ansible-playbook@v2
         with:
