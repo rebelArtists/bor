@@ -9,9 +9,14 @@ inputs:
     description: 'Ansible inventory to use'
     required: true
     default: inventory.yml
+  ecr_image:
+    description: 'commit tagged docker image to pull'
+    required: true
+    default: 0xpolygon/bor:0.3.0-beta3
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.playbook }}
     - ${{ inputs.inventory }}
+    - ${{ inputs.ecr_image }}

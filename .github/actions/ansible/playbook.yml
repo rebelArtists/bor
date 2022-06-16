@@ -4,7 +4,7 @@
   vars:
     create_containers: 1
     default_container_name: bor
-    default_container_image: 0xpolygon/bor:0.3.0-beta3
+    default_container_image: {{ ecr_image }}
   tasks:
     - name: Install Docker Module for Python
       pip:

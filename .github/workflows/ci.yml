@@ -49,16 +49,17 @@ jobs:
         id: init
         working-directory: .github/actions/ci_deployment_cluster
         run: terraform init
-        # env:
-        #   GIT_SSH_COMMAND: "echo '${{ secrets.GH_SSH_KEY }}' > id_rsa
-        #     && ssh-keyscan github.com > known_hosts
-        #     && chmod 600 id_rsa known_hosts
-        #     && ssh -i ./id_rsa -o UserKnownHostsFile=./known_hosts"
-
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'push'
+        run: terraform plan -no-color -input=false
+        continue-on-error: false
       - uses: dawidd6/action-ansible-playbook@v2
         with:
           # Required, playbook filepath
           playbook: playbook.yml
+          # tagged docker image location
+          ecr_image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           # Optional, directory where playbooks live
           directory: .github/actions/ansible
           # Optional, SSH private key
@@ -67,4 +68,4 @@ jobs:
           inventory: |
             all:
               hosts:
-                ec2-3-144-232-188.us-east-2.compute.amazonaws.com:
+                ec2-3-144-98-60.us-east-2.compute.amazonaws.com:
