@@ -5,18 +5,18 @@
     create_containers: 1
     default_container_name: bor
     default_container_image: "{{ lookup('env','ECR_IMAGE') }}"
-  environment:
-    AWS_ACCESS_KEY_ID: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
-    AWS_SECRET_ACCESS_KEY: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
-    AWS_REGION: us-east-2
   tasks:
     - name: Install Docker Module for Python
       pip:
         name: docker
     - name: Login ECR
       shell: "{{ item }}"
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
+        AWS_SECRET_ACCESS_KEY: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
+        AWS_REGION: us-east-2
       with_items:
-       - $(aws ecr get-login --no-include-email --region us-east-1)
+       - $(aws ecr get-login --no-include-email --region us-east-2)
     - name: Pull default docker image
       docker_image:
         name: "{{ default_container_image }}"
