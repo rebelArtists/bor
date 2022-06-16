@@ -57,6 +57,9 @@ jobs:
         continue-on-error: false
       - uses: dawidd6/action-ansible-playbook@v2
         env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SANDBOX_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SANDBOX_KEY }}
+          AWS_REGION: us-east-2
           ECR_IMAGE: ${{ steps.login-ecr.outputs.registry }}/bor_images:${{ steps.vars.outputs.sha_short }}
         with:
           # Required, playbook filepath
