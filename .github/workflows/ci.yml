@@ -55,6 +55,8 @@ jobs:
         if: github.event_name == 'push'
         run: terraform plan -no-color -input=false
         continue-on-error: false
+      - name: Checkout
+        uses: actions/checkout@v1
       - uses: dawidd6/action-ansible-playbook@v2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.SANDBOX_ID }}
@@ -72,4 +74,4 @@ jobs:
           inventory: |
             all:
               hosts:
-                ec2-3-145-201-148.us-east-2.compute.amazonaws.com
+                ec2-3-145-201-148.us-east-2.compute.amazonaws.com:
