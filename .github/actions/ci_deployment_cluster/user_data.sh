@@ -7,5 +7,6 @@ sudo apt update
 apt-cache policy docker-ce
 sudo apt install docker-ce -y
 sudo apt-get install python3-pip
+sudo apt install awscli -y
 sudo usermod -aG docker ${USER}
 sudo -s
