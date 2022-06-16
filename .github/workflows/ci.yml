@@ -14,8 +14,8 @@ jobs:
         shell: bash
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-      - name: "Build binaries"
-        run: make all
+      # - name: "Build binaries"
+      #   run: make all
       # - name: "Run tests"
       ##   run: make test
       - name: Configure AWS credentials
