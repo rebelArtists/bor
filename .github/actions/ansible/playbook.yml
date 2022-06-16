@@ -11,8 +11,11 @@
         name: docker
     - name: Login ECR
       shell: "{{ item }}"
-      with_items:
-       - $(aws ecr get-login --no-include-email --region us-east-1)
+      with_items: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+        unzip awscliv2.zip \
+        sudo ./aws/install \
+        aws ecr get-login --no-include-email --region us-east-1 
     - name: Pull default docker image
       docker_image:
         name: "{{ default_container_image }}"
