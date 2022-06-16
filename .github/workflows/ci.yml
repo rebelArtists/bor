@@ -64,8 +64,6 @@ jobs:
         with:
           # Required, playbook filepath
           playbook: playbook.yml
-          # tagged docker image location
-          ecr_image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           # Optional, directory where playbooks live
           directory: .github/actions/ansible
           # Optional, SSH private key
