@@ -9,11 +9,11 @@ module "docker_run_bor_test" {
   ami                  = "ami-0b9ecb12083282d75"
   instance_type        = "m5d.xlarge"
   instance_port        = 22
-  instance_name_prefix = "node-docker-ci"
+  instance_name_prefix = "docker-ci-box"
   availability_zone    = "us-east-2a"
   ebs_vol_name         = "ebs"
   ebs_vol_size         = 500
-  sec_group_name       = "node-networking-docker-ci"
-  key_name             = "node_docker_ci"
+  sec_group_name       = "networking-docker-ci"
+  key_name             = "docker_ci_key"
   user_data            = filebase64("${path.module}/user_data.sh")
 }
