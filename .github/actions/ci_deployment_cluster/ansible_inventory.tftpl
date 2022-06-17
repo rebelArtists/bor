@@ -1,5 +1,3 @@
-all:
-  hosts:
-    %{ for ip in hostnames ~}
-    ${ip}:
-    %{ endfor ~}
+%{ for ip in hostnames ~}
+${ip},
+%{ endfor ~}
