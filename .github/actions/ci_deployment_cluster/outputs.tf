@@ -8,9 +8,9 @@ output "host_ips" {
 }
 
 resource "local_file" "AnsibleInventory" {
- content = templatefile("ansible_inventory.tmpl",
+ content = templatefile("${path.module}/ansible_inventory.tftpl",
    {
-    hostnames = module.docker_run_bor_test.ec2_validator_ips
+    hostnames = "${module.docker_run_bor_test.ec2_validator_ips}"
    }
  )
  filename = "dynamic_inventory"
