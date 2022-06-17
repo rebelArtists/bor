@@ -88,7 +88,7 @@ jobs:
           key: ${{ env.ANSIBLE_PK }}
           # Optional, todo make dynamic
           options: |
-            --inventory .github/actions/ci_deployment_cluster/dynamic_inventory
+            --inventory ../ci_deployment_cluster/dynamic_inventory
       - name: Destroy resources jobs
         id: destroy
         working-directory: .github/actions/ci_deployment_cluster
