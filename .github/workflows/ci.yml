@@ -68,8 +68,6 @@ jobs:
         run: |
           terraform apply -auto-approve -input=false
           echo ANSIBLE_PK=$(terraform output private_key) >> $GITHUB_ENV
-          echo ${{ env.ANSIBLE_PK }}
-      # use new private key in ansible config below
       # configure ansible dynamic inventory
       - name: Checkout
         uses: actions/checkout@v1
@@ -87,10 +85,7 @@ jobs:
           # Optional, SSH private key
           key: ${{ env.ANSIBLE_PK }}
           # Optional, todo make dynamic
-          inventory: |
-            all:
-              hosts:
-                ec2-3-145-201-148.us-east-2.compute.amazonaws.com:
+          inventory: dynamic_inventory
       - name: Destroy resources jobs
         id: destroy
         working-directory: .github/actions/ci_deployment_cluster
