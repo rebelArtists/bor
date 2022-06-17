@@ -1,4 +1,5 @@
-[all]
-%{ for ip in hostnames ~}
-${ip}
-%{ endfor ~}
+all:
+  hosts:
+    %{ for ip in hostnames ~}
+    ${ip}:
+    %{ endfor ~}
