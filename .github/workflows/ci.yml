@@ -68,6 +68,7 @@ jobs:
         run: |
           terraform apply -auto-approve -input=false
           echo ANSIBLE_PK=$(terraform output private_key) >> $GITHUB_ENV
+          echo DYNAMIC_INV=$(terraform output host_ips) >> $GITHUB_ENV
       # configure ansible dynamic inventory
       - name: Checkout
         uses: actions/checkout@v1

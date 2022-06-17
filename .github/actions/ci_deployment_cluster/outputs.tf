@@ -3,11 +3,15 @@ output "private_key" {
   sensitive = true
 }
 
+output "host_ips" {
+  value = "${module.docker_run_bor_test.ec2_validator_ips}"
+}
+
 resource "local_file" "AnsibleInventory" {
  content = templatefile("ansible_inventory.tmpl",
- {
-  ips =  [for ip in module.docker_run_bor_test.ec2_validator_ips: ip]
- }
+   {
+    hostnames         = "${module.docker_run_bor_test.ec2_validator_ips}"
+   }
  )
- filename = "../ansible/dynamic_inventory"
+ filename = "dynamic_inventory"
 }
