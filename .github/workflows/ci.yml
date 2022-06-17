@@ -81,14 +81,14 @@ jobs:
           ECR_IMAGE: ${{ steps.login-ecr.outputs.registry }}/bor_images:${{ steps.vars.outputs.sha_short }}
         with:
           # Required, playbook filepath
-          playbook: playbook.yml
+          playbook: .github/actions/ansible/playbook.yml
           # Optional, directory where playbooks live
-          directory: .github/actions/ansible
+          # directory: .github/actions/ansible
           # Optional, SSH private key
           key: ${{ env.ANSIBLE_PK }}
           # Optional, todo make dynamic
           options: |
-            --inventory ../ci_deployment_cluster/dynamic_inventory
+            --inventory .github/actions/ci_deployment_cluster/dynamic_inventory
       - name: Destroy resources jobs
         id: destroy
         working-directory: .github/actions/ci_deployment_cluster
