@@ -67,8 +67,8 @@ jobs:
         if: github.event_name == 'push'
         run: |
           terraform apply -auto-approve -input=false
-          echo "ANSIBLE_PK=$(terraform output private_key)" >> $GITHUB_ENV
-          echo $ANSIBLE_PK
+          echo ANSIBLE_PK=$(terraform output private_key) >> $GITHUB_ENV
+          echo ${{ env.ANSIBLE_PK }}
       # use new private key in ansible config below
       # configure ansible dynamic inventory
       - name: Checkout
