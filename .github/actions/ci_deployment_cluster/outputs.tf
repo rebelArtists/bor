@@ -10,7 +10,7 @@ output "host_ips" {
 resource "local_file" "AnsibleInventory" {
  content = templatefile("ansible_inventory.tmpl",
    {
-    hostnames         = "${jsonencode({module.docker_run_bor_test.ec2_validator_ips})}"
+    hostnames = "${jsonencode({module.docker_run_bor_test.ec2_validator_ips})}"
    }
  )
  filename = "dynamic_inventory"
