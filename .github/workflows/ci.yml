@@ -68,7 +68,7 @@ jobs:
         run: |
           terraform apply -auto-approve -input=false
           echo ANSIBLE_PK=$(terraform output private_key) >> $GITHUB_ENV
-          echo DYNAMIC_INV=$(terraform output host_ips) >> $GITHUB_ENV
+          echo DYNAMIC_INV=$(terraform output ansible_inventory) >> $GITHUB_ENV
           echo ${{ env.DYNAMIC_INV }}
       # configure ansible dynamic inventory
       - name: Checkout
@@ -81,14 +81,14 @@ jobs:
           ECR_IMAGE: ${{ steps.login-ecr.outputs.registry }}/bor_images:${{ steps.vars.outputs.sha_short }}
         with:
           # Required, playbook filepath
-          playbook: .github/actions/ansible/playbook.yml
+          playbook: playbook.yml
           # Optional, directory where playbooks live
-          # directory: .github/actions/ansible
+          directory: .github/actions/ansible
           # Optional, SSH private key
           key: ${{ env.ANSIBLE_PK }}
           # Optional, todo make dynamic
-          options: |
-            --inventory .github/actions/ci_deployment_cluster/dynamic_inventory
+          inventory: |
+            ${{ env.DYNAMIC_INV }}
       - name: Destroy resources jobs
         id: destroy
         working-directory: .github/actions/ci_deployment_cluster
