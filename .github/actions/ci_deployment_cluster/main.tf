@@ -14,6 +14,6 @@ module "docker_run_bor_test" {
   ebs_vol_name         = "ebs"
   ebs_vol_size         = 500
   sec_group_name       = "sentry-networking-docker"
-  key_name             = "aws_key_docker"
+  key_name             = "aws_key_docker_ci"
   user_data            = filebase64("${path.module}/user_data.sh")
 }

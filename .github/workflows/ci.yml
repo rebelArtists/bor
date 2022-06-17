@@ -49,12 +49,17 @@ jobs:
         id: init
         working-directory: .github/actions/ci_deployment_cluster
         run: terraform init
-      - name: Terraform Plan
-        id: plan
+      # - name: Terraform Plan
+      #   id: plan
+      #   working-directory: .github/actions/ci_deployment_cluster
+      #   if: github.event_name == 'push'
+      #   run: terraform plan -no-color -input=false
+      #   continue-on-error: false
+      - name: Destroy any previous run artifacts
+        id: destroy artifacts
         working-directory: .github/actions/ci_deployment_cluster
         if: github.event_name == 'push'
-        run: terraform plan -no-color -input=false
-        continue-on-error: false
+        run: terraform destroy -auto-approve
       - name: Terraform Apply
         id: apply
         working-directory: .github/actions/ci_deployment_cluster
