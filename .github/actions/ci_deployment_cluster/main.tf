@@ -2,6 +2,16 @@ provider "aws" {
   region = "us-east-2"
 }
 
+terraform {
+  cloud {
+    organization = "Polygon-Technology"
+
+    workspaces {
+      name = "gh-actions-demo"
+    }
+  }
+}
+
 module "docker_run_bor_test" {
   source = "git@github.com:maticnetwork/terraform-multicloud-resources//aws/maticnetwork/modules/nodes/ci_nodes?ref=f2b8c0f"
 
