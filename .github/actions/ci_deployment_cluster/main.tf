@@ -17,12 +17,3 @@ module "docker_run_bor_test" {
   key_name             = "aws_key_docker"
   user_data            = filebase64("${path.module}/user_data.sh")
 }
-
-resource "aws_ecr_repository" "bor_images" {
-  name                 = "bor_images"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}

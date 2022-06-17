@@ -55,6 +55,11 @@ jobs:
         if: github.event_name == 'push'
         run: terraform plan -no-color -input=false
         continue-on-error: false
+      - name: Terraform Apply
+        id: apply
+        working-directory: .github/actions/ci_deployment_cluster
+        if: github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
       # todo add terraform apply to CI (standup temp network cluster for testing)
       # ensure using correct env for standing up arch, correct key in TF cloud
       # configure ansible dynamic inventory
@@ -78,4 +83,8 @@ jobs:
             all:
               hosts:
                 ec2-3-145-201-148.us-east-2.compute.amazonaws.com:
-      # todo: terraform destroy all resources
+      - name: Destroy resources jobs
+        id: destroy
+        working-directory: .github/actions/ci_deployment_cluster
+        if: github.event_name == 'push'
+        run: terraform destroy -auto-approve
