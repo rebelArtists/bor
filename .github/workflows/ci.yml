@@ -56,11 +56,11 @@ jobs:
       #   if: github.event_name == 'push'
       #   run: terraform plan -no-color -input=false
       #   continue-on-error: false
-      - name: Destroy any previous run artifacts
-        id: destroy_artifacts
-        working-directory: .github/actions/ci_deployment_cluster
-        if: github.event_name == 'push'
-        run: terraform destroy -auto-approve
+      # - name: Destroy any previous run artifacts
+      #   id: destroy_artifacts
+      #   working-directory: .github/actions/ci_deployment_cluster
+      #   if: github.event_name == 'push'
+      #   run: terraform destroy -auto-approve
       - name: Terraform Apply
         id: apply
         working-directory: .github/actions/ci_deployment_cluster
@@ -88,7 +88,7 @@ jobs:
           key: ${{ env.ANSIBLE_PK }}
           # Optional, todo make dynamic
           options: |
-            --inventory dynamic_inventory
+            --inventory .github/actions/ci_deployment_cluster/dynamic_inventory
       - name: Destroy resources jobs
         id: destroy
         working-directory: .github/actions/ci_deployment_cluster

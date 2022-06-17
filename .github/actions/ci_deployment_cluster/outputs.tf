@@ -13,5 +13,5 @@ resource "local_file" "AnsibleInventory" {
     hostnames = module.docker_run_bor_test.ec2_validator_ips[0]
    }
  )
- filename = "../ansible/dynamic_inventory"
+ filename = "${path.module}/dynamic_inventory"
 }
