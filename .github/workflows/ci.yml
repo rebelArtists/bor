@@ -87,7 +87,8 @@ jobs:
           # Optional, SSH private key
           key: ${{ env.ANSIBLE_PK }}
           # Optional, todo make dynamic
-          inventory: dynamic_inventory
+          options: |
+            --inventory dynamic_inventory
       - name: Destroy resources jobs
         id: destroy
         working-directory: .github/actions/ci_deployment_cluster
