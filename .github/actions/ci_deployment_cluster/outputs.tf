@@ -6,7 +6,7 @@ output "private_key" {
 resource "local_file" "AnsibleInventory" {
  content = templatefile("ansible_inventory.tmpl",
  {
-  ips =  "${module.docker_run_bor_test.ec2_validator_ips}"
+  ips =  [for ip in module.docker_run_bor_test.ec2_validator_ips: ip]
  }
  )
  filename = "../ansible/dynamic_inventory"
