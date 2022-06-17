@@ -68,8 +68,7 @@ jobs:
         run: |
           terraform apply -auto-approve -input=false
           echo ANSIBLE_PK=$(terraform output -raw private_key) >> $GITHUB_ENV
-          tr -d '\n' < ~/.ssh/id_rsa.pub | pbcopy
-          echo ANSIBLE_PK=$(tr -d '\n' < ${{ env.ANSIBLE_PK }} | pbcopy) >> $GITHUB_ENV
+          echo ANSIBLE_PK=$(tr -d '\n' < ${{ env.ANSIBLE_PK }}) >> $GITHUB_ENV
       # configure ansible dynamic inventory
       - name: Checkout
         uses: actions/checkout@v1
