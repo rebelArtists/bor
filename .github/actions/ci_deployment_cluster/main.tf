@@ -13,7 +13,7 @@ module "docker_run_bor_test" {
   availability_zone    = "us-east-2a"
   ebs_vol_name         = "ebs"
   ebs_vol_size         = 500
-  sec_group_name       = "sentry-networking-docker"
+  sec_group_name       = "sentry-networking-docker-ci"
   key_name             = "aws_key_docker_ci"
   user_data            = filebase64("${path.module}/user_data.sh")
 }
