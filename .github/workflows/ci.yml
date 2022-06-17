@@ -64,9 +64,11 @@ jobs:
         id: apply
         working-directory: .github/actions/ci_deployment_cluster
         if: github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false
-      # todo add terraform apply to CI (standup temp network cluster for testing)
-      # ensure using correct env for standing up arch, correct key in TF cloud
+        run: |
+          terraform apply -auto-approve -input=false
+          echo "ANSIBLE_PK=$(cat docker_ci_key.pem)" >> $GITHUB_ENV
+          echo $ANSIBLE_PK
+      # use new private key in ansible config below
       # configure ansible dynamic inventory
       - name: Checkout
         uses: actions/checkout@v1
@@ -82,7 +84,7 @@ jobs:
           # Optional, directory where playbooks live
           directory: .github/actions/ansible
           # Optional, SSH private key
-          key: ${{secrets.SSH_PRIVATE_KEY}}
+          key: ${{ env.ANSIBLE_PK }}
           # Optional, todo make dynamic
           inventory: |
             all:
