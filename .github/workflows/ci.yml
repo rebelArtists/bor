@@ -68,7 +68,7 @@ jobs:
         run: |
           terraform apply -auto-approve -input=false
           ANSIBLE_PK=$(terraform output -raw private_key)
-          echo "ANSIBLE_PK=$ANSIBLE_PK" >> $GITHUB_ENV
+          echo "FINAL_PK=$ANSIBLE_PK" >> $GITHUB_ENV
           echo DYNAMIC_INV=$(terraform output -raw ansible_inventory) >> $GITHUB_ENV
       # configure ansible dynamic inventory
       - name: Checkout
@@ -85,7 +85,7 @@ jobs:
           # Optional, directory where playbooks live
           directory: .github/actions/ansible
           # Optional, SSH private key
-          key: ${{ env.ANSIBLE_PK }}
+          key: ${{ env.FINAL_PK }}
           # Optional, todo make dynamic
           inventory: |
             ${{ env.DYNAMIC_INV }}
