@@ -43,7 +43,6 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          # terraform_version: 0.13.0
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           terraform_wrapper: false
       - name: 'Terraform Init'
@@ -71,7 +70,6 @@ jobs:
           echo 'ANSIBLE_PK<<EOF' >> $GITHUB_ENV
           terraform output -raw private_key >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-      # configure ansible dynamic inventory
       - name: Checkout
         uses: actions/checkout@v1
       - uses: dawidd6/action-ansible-playbook@v2
@@ -81,15 +79,22 @@ jobs:
           AWS_REGION: us-east-2
           ECR_IMAGE: ${{ steps.login-ecr.outputs.registry }}/bor_images:${{ steps.vars.outputs.sha_short }}
         with:
-          # Required, playbook filepath
           playbook: playbook.yml
-          # Optional, directory where playbooks live
           directory: .github/actions/ansible
-          # Optional, SSH private key
           key: ${{ env.ANSIBLE_PK }}
-          # Optional, todo make dynamic
           inventory: |
             ${{ env.DYNAMIC_INV }}
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+      - name: 'Terraform Init'
+        id: init
+        working-directory: .github/actions/ci_deployment_cluster
+        run: terraform init
       - name: Destroy resources jobs
         id: destroy
         working-directory: .github/actions/ci_deployment_cluster
