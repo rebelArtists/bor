@@ -55,11 +55,11 @@ jobs:
       #   if: github.event_name == 'push'
       #   run: terraform plan -no-color -input=false
       #   continue-on-error: false
-      # - name: Destroy any previous run artifacts
-      #   id: destroy_artifacts
-      #   working-directory: .github/actions/ci_deployment_cluster
-      #   if: github.event_name == 'push'
-      #   run: terraform destroy -auto-approve
+      - name: Destroy any previous run artifacts
+        id: destroy_artifacts
+        working-directory: .github/actions/ci_deployment_cluster
+        if: github.event_name == 'push'
+        run: terraform destroy -auto-approve -target module.docker_run_bor_test
       - name: Terraform Apply
         id: apply
         working-directory: .github/actions/ci_deployment_cluster
@@ -67,11 +67,6 @@ jobs:
         run: |
           terraform apply -auto-approve -input=false
           echo DYNAMIC_INV=$(terraform output -raw ansible_inventory) >> $GITHUB_ENV
-          echo 'ANSIBLE_PK<<EOF' >> $GITHUB_ENV
-          terraform output -raw private_key >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          echo "::add-mask::$ANSIBLE_PK"
-          echo "::add-mask::$DYNAMIC_INV"
       - name: Checkout
         uses: actions/checkout@v1
       - uses: dawidd6/action-ansible-playbook@v2
@@ -83,7 +78,7 @@ jobs:
         with:
           playbook: playbook.yml
           directory: .github/actions/ansible
-          key: ${{ env.ANSIBLE_PK }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           inventory: |
             ${{ env.DYNAMIC_INV }}
       - name: Checkout
@@ -101,4 +96,4 @@ jobs:
         id: destroy
         working-directory: .github/actions/ci_deployment_cluster
         if: github.event_name == 'push'
-        run: terraform destroy -auto-approve
+        run: terraform destroy -auto-approve -target module.docker_run_bor_test
