@@ -5,6 +5,7 @@
     create_containers: 1
     default_container_name: bor
     default_container_image: "{{ lookup('env','ECR_IMAGE') }}"
+    no_log: true
   tasks:
     - name: install pip3
       shell: "{{ item }}"
