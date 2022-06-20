@@ -92,7 +92,7 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           terraform_wrapper: false
       - name: 'Terraform Init'
-        id: init
+        id: initDestroy
         working-directory: .github/actions/ci_deployment_cluster
         run: terraform init
       - name: Destroy resources jobs
