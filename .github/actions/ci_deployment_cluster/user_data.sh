@@ -10,3 +10,4 @@ sudo apt install docker-ce -y
 sudo apt install awscli -y
 sudo usermod -aG docker ${USER}
 sudo -s
+sleep 3m

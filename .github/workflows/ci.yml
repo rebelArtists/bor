@@ -70,8 +70,6 @@ jobs:
           echo 'ANSIBLE_PK<<EOF' >> $GITHUB_ENV
           terraform output -raw private_key >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-          echo "::add-mask::$ANSIBLE_PK"
-          echo "::add-mask::$DYNAMIC_INV"
       - name: Checkout
         uses: actions/checkout@v1
       - uses: dawidd6/action-ansible-playbook@v2
@@ -80,11 +78,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SANDBOX_KEY }}
           AWS_REGION: us-east-2
           ECR_IMAGE: ${{ steps.login-ecr.outputs.registry }}/bor_images:${{ steps.vars.outputs.sha_short }}
-          no_log: true
         with:
           playbook: playbook.yml
           directory: .github/actions/ansible
-          key: ${{ env.ANSIBLE_PK }}
+          key: echo "::add-mask::$ANSIBLE_PK"
           inventory: |
             ${{ env.DYNAMIC_INV }}
       - name: Checkout
