@@ -10,3 +10,4 @@ sudo apt-get install python3-pip -y
 sudo apt install awscli -y
 sudo usermod -aG docker ${USER}
 sudo -s
+sudo apt-get install python3-pip -y
