@@ -21,6 +21,7 @@
           - python3-pip
           - virtualenv
           - python3-setuptools
+          - awscli
         state: latest
         update_cache: true
     - name: Add Docker GPG apt Key
