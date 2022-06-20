@@ -7,7 +7,8 @@
     default_container_image: "{{ lookup('env','ECR_IMAGE') }}"
   tasks:
     - name: install pip3
-      apt: name=python3-pip state=present
+      run: |
+        sudo apt install python3-pip
     - name: Install Docker Module for Python
       pip:
         name: docker
