@@ -67,11 +67,9 @@ jobs:
         run: |
           terraform apply -auto-approve -input=false
           echo DYNAMIC_INV=$(terraform output -raw ansible_inventory) >> $GITHUB_ENV
-          echo 'ANSIBLE_PK<<EOF' >> $GITHUB_ENV
+          echo 'ANSIBLE_TOKEN<<EOF' >> $GITHUB_ENV
           terraform output -raw private_key >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-          echo "::add-mask::${{ env.ANSIBLE_PK }}"
-          echo "::set-output name=SECRET_KEY::${{ env.ANSIBLE_PK }}"
       - name: Checkout
         uses: actions/checkout@v1
       - uses: dawidd6/action-ansible-playbook@v2
@@ -83,7 +81,7 @@ jobs:
         with:
           playbook: playbook.yml
           directory: .github/actions/ansible
-          key: ${{ steps.apply.outputs.SECRET_KEY }}
+          key: ${{ env.ANSIBLE_TOKEN }}
           inventory: |
             ${{ env.DYNAMIC_INV }}
       - name: Checkout
