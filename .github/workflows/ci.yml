@@ -83,7 +83,11 @@ jobs:
           username: ${{ secrets.AWX_USER }}
           password: ${{ secrets.AWX_PASSWORD }}
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"key_1": "value_1", "key_2": "value_2"}'
+          data: '{
+              "extra_vars": {
+                  "inventory": ${{ env.DYNAMIC_INV }}
+              }
+          }'
       # - name: Checkout
       #   uses: actions/checkout@v3
       # - name: Setup Terraform
