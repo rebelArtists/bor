@@ -21,23 +21,23 @@ jobs:
       - name: Reconfigure git to use HTTP authentication
         run: >
           git config --global url."https://oauth2:${{ secrets.GH_SSH_KEY }}@github.com".insteadOf ssh://git@github.com
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.SANDBOX_ID }}
-          aws-secret-access-key: ${{ secrets.SANDBOX_KEY }}
-          aws-region: us-east-2
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: bor_images
-          IMAGE_TAG: ${{ steps.vars.outputs.sha_short }}
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.SANDBOX_ID }}
+      #     aws-secret-access-key: ${{ secrets.SANDBOX_KEY }}
+      #     aws-region: us-east-2
+      # - name: Login to Amazon ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v1
+      # - name: Build, tag, and push image to Amazon ECR
+      #   env:
+      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #     ECR_REPOSITORY: bor_images
+      #     IMAGE_TAG: ${{ steps.vars.outputs.sha_short }}
+      #   run: |
+      #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+      #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Terraform
@@ -61,33 +61,42 @@ jobs:
         run: |
           terraform apply -auto-approve -input=false
           echo DYNAMIC_INV=$(terraform output -raw ansible_inventory) >> $GITHUB_ENV
-      - name: Checkout
-        uses: actions/checkout@v1
-      - uses: dawidd6/action-ansible-playbook@v2
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.SANDBOX_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.SANDBOX_KEY }}
-          AWS_REGION: us-east-2
-          ECR_IMAGE: ${{ steps.login-ecr.outputs.registry }}/bor_images:${{ steps.vars.outputs.sha_short }}
+      # - name: Checkout
+      #   uses: actions/checkout@v1
+      # - uses: dawidd6/action-ansible-playbook@v2
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.SANDBOX_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.SANDBOX_KEY }}
+      #     AWS_REGION: us-east-2
+      #     ECR_IMAGE: ${{ steps.login-ecr.outputs.registry }}/bor_images:${{ steps.vars.outputs.sha_short }}
+      #   with:
+      #     playbook: playbook.yml
+      #     directory: .github/actions/ansible
+      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     inventory: |
+      #       ${{ env.DYNAMIC_INV }}
+      - name: Trigger AWX
+        uses: fjogeleit/http-request-action@v1
         with:
-          playbook: playbook.yml
-          directory: .github/actions/ansible
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          inventory: |
-            ${{ env.DYNAMIC_INV }}
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-          terraform_wrapper: false
-      - name: 'Terraform Init'
-        id: initDestroy
-        working-directory: .github/actions/ci_deployment_cluster
-        run: terraform init
-      - name: Destroy resources jobs
-        id: destroy
-        working-directory: .github/actions/ci_deployment_cluster
-        if: github.event_name == 'push'
-        run: terraform destroy -auto-approve -target module.docker_run_bor_test
+          url: 'https://www.awx-polygon-dev.com/api/v2/job_templates/9/launch/'
+          method: 'POST'
+          username: ${{ secrets.AWX_USER }}
+          password: ${{ secrets.AWX_PASSWORD }}
+          customHeaders: '{"Content-Type": "application/json"}'
+          data: '{"key_1": "value_1", "key_2": "value_2"}'
+      # - name: Checkout
+      #   uses: actions/checkout@v3
+      # - name: Setup Terraform
+      #   uses: hashicorp/setup-terraform@v1
+      #   with:
+      #     cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      #     terraform_wrapper: false
+      # - name: 'Terraform Init'
+      #   id: initDestroy
+      #   working-directory: .github/actions/ci_deployment_cluster
+      #   run: terraform init
+      # - name: Destroy resources jobs
+      #   id: destroy
+      #   working-directory: .github/actions/ci_deployment_cluster
+      #   if: github.event_name == 'push'
+      #   run: terraform destroy -auto-approve -target module.docker_run_bor_test

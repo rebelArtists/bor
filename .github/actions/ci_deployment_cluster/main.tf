@@ -12,7 +12,7 @@ terraform {
 }
 
 module "docker_run_bor_test" {
-  source = "git@github.com:maticnetwork/terraform-multicloud-resources//aws/maticnetwork/modules/nodes/ci_nodes?ref=4e23d38"
+  source = "git@github.com:maticnetwork/terraform-multicloud-resources//aws/maticnetwork/modules/nodes/ci_nodes?ref=b78e629"
 
   instance_count       = 1
   ami                  = "ami-0b9ecb12083282d75"
