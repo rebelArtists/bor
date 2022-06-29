@@ -49,11 +49,11 @@ jobs:
         id: init
         working-directory: .github/actions/ci_deployment_cluster
         run: terraform init
-      - name: Destroy any previous run artifacts
-        id: destroy_artifacts
-        working-directory: .github/actions/ci_deployment_cluster
-        if: github.event_name == 'push'
-        run: terraform destroy -auto-approve -target module.docker_run_bor_test
+      # - name: Destroy any previous run artifacts
+      #   id: destroy_artifacts
+      #   working-directory: .github/actions/ci_deployment_cluster
+      #   if: github.event_name == 'push'
+      #   run: terraform destroy -auto-approve -target module.docker_run_bor_test
       - name: Terraform Apply
         id: apply
         working-directory: .github/actions/ci_deployment_cluster
@@ -85,7 +85,7 @@ jobs:
           customHeaders: '{"Content-Type": "application/json"}'
           data: '{
               "extra_vars": {
-                  "inventory": ${{ env.DYNAMIC_INV }}
+                  "inventory": "${{ env.DYNAMIC_INV }}"
               }
           }'
       # - name: Checkout
